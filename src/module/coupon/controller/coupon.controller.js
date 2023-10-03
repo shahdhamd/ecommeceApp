@@ -10,9 +10,8 @@ export const createdCoupon=async(req,res,next)=>{
         next(new Error('coupon name already exist ',{cause:409}))
     }else{
 
-        req.body.createdBy=req.user._id; //auth ضفت الادي دي من 
+        req.body.createdBy=req.user._id; 
         // res.json(req.body)
-        //     // amount , expireDate في البدي ببعتلي
         const coupon=await couponModel.create(req.body)
         // res.json(coupon)
         if(!coupon){
@@ -45,33 +44,21 @@ export const deleteCoupon=async(req,res)=>{
         res.status(200).json({message:'sucess delete coupon',coupon})
     }
 }
-export const getValidCoupon=async(req,res)=>{ // بدي اجيب الكوبونات الشغالة
+export const getValidCoupon=async(req,res)=>{ 
     let now=moment()
     // res.json(now)  /// "2023-09-30T06:19:26.596Z"
     let coupons=await couponModel.find({})
     let date=[]
     for(const coupon of coupons){
         let exp=coupon.expireDate
-        let diff=now.diff(exp,'days') // في حال كانت سالبة اذا لساتها فعالة
+        let diff=now.diff(exp,'days') 
         // res.json(diff)
         if(diff<0){
             date.push(coupon)
         }
     }
     res.status(200).json({message:'sucess',date})
-    // // لازم اجيب تاريخ اليوم واقارنه مع اكسبير t
-    // // let now=moment(); // "2023-09-28T14:39:01.476Z"
-    // // res.json(now)   
-    // let now=moment().format('DD/MM/YYYY'); // "28/09/2023" غيرت طريقة كتابة تاريخ اليوم
-    // res.json(now)
-    // // let coupons=await couponModel.findOne({_id:"651590c93853b6f53daaa993"}) // جبت كل الكوبونات
-    // // // let data=[]
-    // // // for(const coupon of coupons){ // بدي اعمل لوب على كل كوبون واقارن التاريخ تبعه
-    // //     let exp=coupons.expireDate;
-    // //     let diff=now.diff(exp,"days") // هيك بوجد الفرق بين التاريخ الي معي  وتاريخ اليوم
-    // //     res.json(diff)    
-    // // // }
-
+    
     
 }
 
